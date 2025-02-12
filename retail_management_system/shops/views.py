@@ -37,6 +37,10 @@ def add_shop(request):
 def edit_shop(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
     if request.method == 'POST':
+        if 'delete' in request.POST:
+            shop.delete()
+            return redirect('shop_list')
+        
         form = ShopForm(request.POST, request.FILES, instance=shop)
         if form.is_valid():
             form.save()
@@ -49,6 +53,7 @@ def delete_shop(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
     shop.delete()
     return redirect('shop_list')
+
 
 def download_report(request):
     response = HttpResponse(content_type='application/zip')
