@@ -1,0 +1,21 @@
+{% extends 'shops/base.html' %}
+{% block content %}
+<h2>All Shops</h2>
+<form method="GET">
+    <input type="text" name="q" placeholder="Search by name" class="form-control w-50 d-inline">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<table class="table mt-3">
+    <tr>
+        <th>Name</th><th>Owner</th><th>Phone</th><th>Actions</th>
+    </tr>
+    {% for shop in shops %}
+    <tr>
+        <td>{{ shop.name }}</td>
+        <td>{{ shop.owner }}</td>
+        <td>{{ shop.phone }}</td>
+        <td><a href="{% url 'delete_shop' shop.id %}" class="btn btn-danger">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
