@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 import csv
+import os
+import zipfile
+from django.conf import settings
 from .models import Shop
 from .forms import ShopForm
 
@@ -48,10 +51,32 @@ def delete_shop(request, shop_id):
     return redirect('shop_list')
 
 def download_report(request):
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="shops_report.csv"'
-    writer = csv.writer(response)
-    writer.writerow(['Name', 'Owner', 'Phone', 'Address'])
-    for shop in Shop.objects.all():
-        writer.writerow([shop.name, shop.owner, shop.phone, shop.address])
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="shops_report.zip"'
+    
+    csv_path = os.path.join(settings.MEDIA_ROOT, 'shops_report.csv')
+    with open(csv_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['Name', 'Owner', 'Phone', 'Address', 'Business License', 'Shop Images'])
+        for shop in Shop.objects.all():
+            license_url = shop.business_license.url if shop.business_license else ''
+            images_url = shop.shop_images.url if shop.shop_images else ''
+            writer.writerow([shop.name, shop.owner, shop.phone, shop.address, license_url, images_url])
+    
+    zip_path = os.path.join(settings.MEDIA_ROOT, 'shops_report.zip')
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        zipf.write(csv_path, 'shops_report.csv')
+        for shop in Shop.objects.all():
+            if shop.business_license:
+                zipf.write(shop.business_license.path, os.path.basename(shop.business_license.path))
+            if shop.shop_images:
+                zipf.write(shop.shop_images.path, os.path.basename(shop.shop_images.path))
+    
+    with open(zip_path, 'rb') as f:
+        response.write(f.read())
+    
+    os.remove(csv_path)
+    os.remove(zip_path)
+    
     return response
+
