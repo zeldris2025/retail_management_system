@@ -12,7 +12,9 @@
         <div class="card">
             <!-- Clickable Image to Open Modal -->
             <img src="{{ shop.shop_images.url }}" class="card-img-top" alt="Shop Image" 
-                 data-bs-toggle="modal" data-bs-target="#imageModal{{ shop.id }}">
+             data-bs-toggle="modal" data-bs-target="#imageModal{{ shop.id }}"
+                style="width: 100%; height: 200px; object-fit: cover;">
+
             
             <div class="card-body text-center">
                 <h5 class="card-title">{{ shop.name }}</h5>
@@ -59,6 +61,4 @@
 </div>
 
 {% endblock %}
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
