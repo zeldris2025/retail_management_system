@@ -1,5 +1,233 @@
 {% extends 'shops/base.html' %}
 {% block content %}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    h2 {
+        font-size: 36px;
+        font-weight: 700;
+        color: rgb(0, 0, 0);
+        text-align: center;
+        margin: 30px 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    form {
+        text-align: center;
+        margin-bottom: 40px;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    .form-control {
+        display: inline-block;
+        padding: 12px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+
+    .btn-primary {
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: 600;
+        background: #ff6b6b;
+        border: none;
+        border-radius: 10px;
+        color: #ffffff;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: #ff4757;
+        transform: translateY(-2px);
+    }
+
+    .row {
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+
+    .card-img-top:hover {
+        transform: scale(1.05);
+    }
+
+    .card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .card-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .btn {
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin: 5px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #4ecdc4;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: #45b7aa;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+    }
+
+    .btn-warning {
+        background: #feca57;
+        border: none;
+        color: #333;
+    }
+
+    .btn-warning:hover {
+        background: #ffb841;
+    }
+
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+        background: #ff6b6b;
+        color: #ffffff;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .modal-title {
+        font-weight: 600;
+    }
+
+    .modal-body {
+        padding: 0;
+    }
+
+    .img-fluid {
+        width: 100%;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        margin-bottom: 10px;
+    }
+
+    .pagination {
+        margin-top: 30px;
+        justify-content: center;
+    }
+
+    .page-link {
+        background: rgba(255, 255, 255, 0.95);
+        color: #ff6b6b;
+        border: none;
+        border-radius: 8px;
+        margin: 0 5px;
+        padding: 10px 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .page-link:hover {
+        background: #ff6b6b;
+        color: #ffffff;
+    }
+
+    .page-item.disabled .page-link {
+        background: rgba(255, 255, 255, 0.5);
+        color: #aaa;
+    }
+
+    footer {
+        background: rgba(255, 255, 255, 0.95);
+        color: #333;
+        padding: 20px 0;
+        margin-top: 50px;
+        box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    footer p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.8;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Carousel styling for multiple images in modal */
+    .carousel-item img {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+        object-fit: contain;
+    }
+</style>
+
 <h2>All Retail Shops</h2>
 <form method="GET">
     <input type="text" name="q" placeholder="Search by name" class="form-control w-50 d-inline">
@@ -10,12 +238,14 @@
     {% for shop in page_obj %}
     <div class="col-md-4 mb-4">
         <div class="card">
-            <!-- Clickable Image to Open Modal -->
-            <img src="{{ shop.shop_images.url }}" class="card-img-top" alt="Shop Image" 
-             data-bs-toggle="modal" data-bs-target="#imageModal{{ shop.id }}"
-                style="width: 100%; height: 200px; object-fit: cover;">
-
-            
+            {% if shop.images.first %}
+                <img src="{{ shop.images.first.image.url }}" class="card-img-top" alt="Shop Image" 
+                     data-bs-toggle="modal" data-bs-target="#imageModal{{ shop.id }}"
+                     style="width: 100%; height: 200px; object-fit: cover;">
+            {% else %}
+                <img src="https://via.placeholder.com/200" class="card-img-top" alt="No Image" 
+                     style="width: 100%; height: 200px; object-fit: cover;">
+            {% endif %}
             <div class="card-body text-center">
                 <h5 class="card-title">{{ shop.name }}</h5>
                 <a href="{% url 'shop_detail' shop.id %}" class="btn btn-primary">View Details</a>
@@ -24,16 +254,36 @@
             </div>
         </div>
 
-        <!-- Modal for Shop Image -->
+        <!-- Modal for all shop images -->
         <div class="modal fade" id="imageModal{{ shop.id }}" tabindex="-1" aria-labelledby="imageModalLabel{{ shop.id }}" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="imageModalLabel{{ shop.id }}">{{ shop.name }} - Image</h5>
+                        <h5 class="modal-title" id="imageModalLabel{{ shop.id }}">{{ shop.name }} - Images</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <img src="{{ shop.shop_images.url }}" class="img-fluid" alt="{{ shop.name }} Image">
+                        {% if shop.images.exists %}
+                            <div id="carousel{{ shop.id }}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% for image in shop.images.all %}
+                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                            <img src="{{ image.image.url }}" class="img-fluid" alt="{{ shop.name }} Image">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel{{ shop.id }}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel{{ shop.id }}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                        {% else %}
+                            <p>No images available.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -43,29 +293,24 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <nav>
+    <div>
         <ul class="pagination">
             {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                <li class="page-item"><a class="page-link" href="?page=1">« First</a></li>
                 <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
             {% endif %}
-
             <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
-
             {% if page_obj.has_next %}
                 <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last »</a></li>
             {% endif %}
         </ul>
-    </nav>
+    </div>
 </div>
+
 <footer class="bg-white text-black text-center py-3 mt-5">
     <div class="container">
-      <p>&copy; 2025 Your Website. All rights reserved. | Developed by Web Tech WS</p>
+        <p>© 2025 RMS System. All rights reserved</p>
     </div>
-  </footer>
+</footer>
 {% endblock %}
-
-
- 
-
