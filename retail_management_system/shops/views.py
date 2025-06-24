@@ -31,7 +31,7 @@ def add_shop(request):
     if request.method == 'POST':
         form = ShopForm(request.POST, request.FILES)
         image_formset = ShopImageFormSet(request.POST, request.FILES, instance=Shop())
-        if form.is_valid() and image_formset.is_valid():
+        if form.is_valid():
             shop = form.save()
             image_formset.instance = shop
             image_formset.save()
@@ -50,8 +50,9 @@ def edit_shop(request, shop_id):
         
         form = ShopForm(request.POST, request.FILES, instance=shop)
         image_formset = ShopImageFormSet(request.POST, request.FILES, instance=shop)
-        if form.is_valid() and image_formset.is_valid():
-            form.save()
+        if form.is_valid():
+            shop = form.save()
+            image_formset.instance = shop  # Ensure images are linked to the shop
             image_formset.save()
             return redirect('shop_list')
     else:
