@@ -5,7 +5,7 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-success">Save Changes</button>
-    <a href="{% url 'shop_list' %}" class="btn btn-secondary">Cancel</a>
+    <a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
 
     <form method="post" action="{% url 'delete_shop' shop.id %}" style="margin-top: 20px;">
 

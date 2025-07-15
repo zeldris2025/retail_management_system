@@ -1,9 +1,74 @@
 {% extends 'shops/base.html' %}
 {% block content %}
-<h2>{{ shop.name }} - Details</h2>
-<p><strong>Owner:</strong> {{ shop.owner }}</p>
-<p><strong>Phone:</strong> {{ shop.phone }}</p>
-<p><strong>Address:</strong> {{ shop.address }}</p>
-<p><a href="{{ shop.business_license.url }}" target="_blank" class="btn btn-secondary">View Certificate</a></p>
-<a href="{% url 'shop_list' %}" class="btn btn-primary">Back to Shops</a>
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">{{ shop.name }} - Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Owner</th>
+                                <td>{{ shop.owner }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Phone</th>
+                                <td>{{ shop.phone }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>{{ shop.email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>{{ shop.address }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Description</th>
+                                <td>{{ shop.description }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Business License</th>
+                                <td>
+                                    {% if shop.business_license %}
+                                        <a href="{{ shop.business_license.url }}" target="_blank" class="btn btn-secondary btn-sm">View Certificate</a>
+                                    {% else %}
+                                        <span class="text-muted">Not uploaded</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4 text-center">
+                    {% if shop.images.all %}
+                        <div id="shopImageCarousel" class="carousel slide mb-3 shadow-sm" data-bs-ride="carousel" style="max-width: 100%;">
+                            <div class="carousel-inner">
+                                {% for image in shop.images.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img src="{{ image.image.url }}" alt="{{ shop.name }} Image {{ forloop.counter }}" class="img-fluid rounded" style="max-height: 350px; width: 100%; object-fit: cover;">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#shopImageCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#shopImageCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No images available</p>
+                    {% endif %}
+                </div>
+            </div>
+            <a href="javascript:history.back()" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -20,12 +20,49 @@ def shop_list(request):
     
     return render(request, 'shops/shop_list.html', {'page_obj': page_obj})
 
+def upolu_shops(request, region):
+    query = request.GET.get('q')
+    tip_top = request.GET.get('tip_top')
+    
+    shops = Shop.objects.filter(island='Upolu', region=region)
+    
+    if query:
+        shops = shops.filter(name__icontains=query)
+    if tip_top is not None:
+        if tip_top == '1':
+            shops = shops.filter(tip_top=True)
+        elif tip_top == '0':
+            shops = shops.filter(tip_top=False)
+    
+    paginator = Paginator(shops, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'shops/upolu_shops.html', {'page_obj': page_obj, 'region': region})
+
+def savaii_shops(request, region):
+    query = request.GET.get('q')
+    tip_top = request.GET.get('tip_top')
+    
+    shops = Shop.objects.filter(island='Savaii', region=region)
+    
+    if query:
+        shops = shops.filter(name__icontains=query)
+    if tip_top is not None:
+        if tip_top == '1':
+            shops = shops.filter(tip_top=True)
+        elif tip_top == '0':
+            shops = shops.filter(tip_top=False)
+    
+    paginator = Paginator(shops, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, 'shops/savaii_shops.html', {'page_obj': page_obj, 'region': region})
+
 def shop_detail(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
     return render(request, 'shops/shop_detail.html', {'shop': shop})
-
-# Relevant parts of views.py
-from .forms import ShopForm, ShopImageFormSet
 
 def add_shop(request):
     if request.method == 'POST':
@@ -52,14 +89,13 @@ def edit_shop(request, shop_id):
         image_formset = ShopImageFormSet(request.POST, request.FILES, instance=shop)
         if form.is_valid():
             shop = form.save()
-            image_formset.instance = shop  # Ensure images are linked to the shop
+            image_formset.instance = shop
             image_formset.save()
             return redirect('shop_list')
     else:
         form = ShopForm(instance=shop)
         image_formset = ShopImageFormSet(instance=shop)
     return render(request, 'shops/edit_shop.html', {'form': form, 'image_formset': image_formset, 'shop': shop})
-
 
 def delete_shop(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
@@ -73,12 +109,11 @@ def download_report(request):
     csv_path = os.path.join(settings.MEDIA_ROOT, 'shops_report.csv')
     with open(csv_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['Name', 'Owner', 'Phone', 'Address', 'Business License', 'Shop Images'])
+        writer.writerow(['Name', 'Owner', 'Phone', 'Address', 'Island', 'Region', 'Business License', 'Shop Images'])
         for shop in Shop.objects.all():
             license_url = shop.business_license.url if shop.business_license else ''
-            # Collect all image URLs for the shop
             image_urls = '; '.join([img.image.url for img in shop.images.all()]) if shop.images.exists() else ''
-            writer.writerow([shop.name, shop.owner, shop.phone, shop.address, license_url, image_urls])
+            writer.writerow([shop.name, shop.owner, shop.phone, shop.address, shop.island, shop.region, license_url, image_urls])
     
     zip_path = os.path.join(settings.MEDIA_ROOT, 'shops_report.zip')
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:

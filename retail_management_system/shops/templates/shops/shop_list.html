@@ -249,7 +249,9 @@
             <div class="card-body text-center">
                 <h5 class="card-title">{{ shop.name }}</h5>
                 <a href="{% url 'shop_detail' shop.id %}" class="btn btn-primary">View Details</a>
-                <a href="{{ shop.business_license.url }}" target="_blank" class="btn btn-secondary">View Certificate</a>
+                {% if shop.business_license %}
+                    <a href="{{ shop.business_license.url }}" target="_blank" class="btn btn-secondary">View Certificate</a>
+                {% endif %}
                 <a href="{% url 'edit_shop' shop.id %}" class="btn btn-warning">Edit</a>
             </div>
         </div>
