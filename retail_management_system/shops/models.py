@@ -31,3 +31,28 @@ class ShopImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.shop.name}"
+    
+    
+class Business(models.Model):
+    BUSINESS_TYPES = (
+        ('HOTEL', 'Hotel'),
+        ('CAFE', 'Cafe'),
+        ('RESTAURANT', 'Restaurant'),
+        ('OTHER', 'Other'),
+    )
+
+    name = models.CharField(max_length=100)
+    business_type = models.CharField(max_length=20, choices=BUSINESS_TYPES)
+    picture = models.ImageField(upload_to='business_pics/', blank=True, null=True)
+    location = models.CharField(max_length=200)
+    business_license = models.ImageField(upload_to='media/licenses/' , blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    island = models.CharField(max_length=50, choices=Shop.ISLAND_CHOICES, default='Upolu', blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.get_business_type_display()})"
+
+    class Meta:
+        verbose_name = "Business"
+        verbose_name_plural = "Businesses"

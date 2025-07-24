@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:shop_id>/edit/', views.edit_shop, name='edit_shop'),
     path('upolu/<str:region>/', views.upolu_shops, name='upolu_shops'),
     path('savaii/<str:region>/', views.savaii_shops, name='savaii_shops'),
+    path('businesses/', views.business_list, name='business_list'),
 ]

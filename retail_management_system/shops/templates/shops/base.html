@@ -100,6 +100,7 @@
     <div class="d-flex">
         <nav class="p-3">
             <h2>Ah Liki RMS</h2>
+            
             <ul class="nav flex-column">
                 <li class="nav-item dropdown" onmouseover="this.querySelector('.dropdown-menu').classList.add('show')" onmouseout="this.querySelector('.dropdown-menu').classList.remove('show')">
                     <a class="nav-link dropdown-toggle" href="#" id="upoluDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -122,6 +123,7 @@
                         <li><a class="dropdown-item" href="{% url 'savaii_shops' region='Region 4' %}">Region 4</a></li>
                     </ul>
                 </li>
+                <li class="nav-item"><a href="{% url 'business_list' %}" class="nav-link">HORECCA</a></li>
                 <li class="nav-item"><a href="{% url 'shop_list' %}" class="nav-link">View Shops</a></li>
                 <li class="nav-item"><a href="{% url 'download_report' %}" class="nav-link">Download Report</a></li>
             </ul>

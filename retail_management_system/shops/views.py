@@ -5,8 +5,9 @@ import csv
 import os
 import zipfile
 from django.conf import settings
-from .models import Shop, ShopImage
+from .models import Shop, ShopImage, Business
 from .forms import ShopForm, ShopImageFormSet
+from django.db.models import Q
 
 def shop_list(request):
     query = request.GET.get('q')
@@ -63,6 +64,38 @@ def savaii_shops(request, region):
 def shop_detail(request, shop_id):
     shop = get_object_or_404(Shop, id=shop_id)
     return render(request, 'shops/shop_detail.html', {'shop': shop})
+
+def business_list(request):
+    businesses = Business.objects.all()
+    
+    # Get filter and search parameters from GET request
+    island = request.GET.get('island', '')
+    business_type = request.GET.get('business_type', '')
+    search_query = request.GET.get('search_query', '')
+    
+    # Apply filters
+    if island:
+        businesses = businesses.filter(island=island)
+    if business_type:
+        businesses = businesses.filter(business_type=business_type)
+    if search_query:
+        businesses = businesses.filter(Q(name__icontains=search_query))
+    
+    businesses = businesses.order_by('name')
+    
+    # Get distinct islands and business types for filter dropdowns
+    islands = Business.objects.values('island').distinct()
+    business_types = Business.BUSINESS_TYPES
+    
+    context = {
+        'businesses': businesses,
+        'islands': islands,
+        'business_types': business_types,
+        'selected_island': island,
+        'selected_business_type': business_type,
+        'search_query': search_query,
+    }
+    return render(request, 'shops/business_list.html', context)
 
 def add_shop(request):
     if request.method == 'POST':

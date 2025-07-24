@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django import forms
-from .models import Shop, ShopImage  # Added Document import      # Added DocumentResource import (adjust path as needed)
+from .models import Shop, ShopImage, Business # Added Document import      # Added DocumentResource import (adjust path as needed)
 from import_export.admin import ImportExportModelAdmin  # Added ImportExportModelAdmin import
 from import_export import resources
 from import_export.fields import Field
@@ -134,3 +134,20 @@ class ShopAdmin(ImportExportModelAdmin):
     list_display = ('name', 'owner', 'phone', 'address', 'island', 'region', 'pdf_file_link', 'pdf_file_samoan_link')
     list_filter = ('island', 'region')
     search_fields = ('name', 'owner', 'phone', 'address')
+
+@admin.register(Business)
+class BusinessAdmin(admin.ModelAdmin):
+    list_display = ('name', 'business_type', 'location', 'business_license', 'created_at')
+    list_filter = ('business_type', 'created_at')
+    search_fields = ('name', 'location', 'business_license')
+    list_per_page = 25
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'business_type', 'island', 'location', 'picture','business_license')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
